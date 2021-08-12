@@ -2,19 +2,23 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
+//Settings 
+app.set('appName','Gian App')
+app.set('port',3000)
+
+//Middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extend: false }));
 app.use(express.static("public")); // se publica en la raiz
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
-app.listen(3000, function () {
-  console.log("Example app listening at http://localhost:3000");
-});
 
 //Basic routing
+app.get("/", (req, res) => {
+    const data = [{ name: 'john'},{name:'joe'}, {name:'cameron'}];
+    res.render('index.ejs',{people: data})
+})
+
 app.get("/test", function (req, res) {
   res.send("<h1>Test</h1>");
 });
@@ -38,4 +42,9 @@ app.put("/", function (req, res) {
 
 app.delete("/", function (req, res) {
   res.send("Got a DELETE request");
+});
+
+app.listen(app.get('port'), function () {
+    console.log(app.get('appName'));
+    console.log(`Example app listening at http://localhost:${app.get('port')}`);
 });

@@ -4,19 +4,23 @@ const app = express();
 
 //Settings 
 app.set('appName','Gian App')
-app.set('port',3000)
+app.set('port',process.env.PORT || 3000)
+
 
 //Middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extend: false }));
-app.use(express.static("public")); // se publica en la raiz
+app.use("/public",express.static("public")); 
+// Middlewares
+//app.use('/', express.static(path.join(__dirname, '/app/')));
 
 
 //Basic routing
 app.get("/", (req, res) => {
-    const data = [{ name: 'john'},{name:'joe'}, {name:'cameron'}];
-    res.render('index.ejs',{people: data})
+    const data = [{ name: 'gian'},{name:'mary'}, {name:'james'}];
+    // res.render('index.ejs',{people: data})
+    res.send({people: data})
 })
 
 app.get("/test", function (req, res) {
@@ -25,7 +29,7 @@ app.get("/test", function (req, res) {
 
 app.get("/user", function (req, res) {
   res.json({
-    username: "Gian",
+    username: "Giancarlo",
     country: "Ecuador",
   });
 });
@@ -33,7 +37,12 @@ app.get("/user", function (req, res) {
 app.post("/user/:id", function (req, res) {
   console.log("req.body", req.body);
   console.log("req.params:", req.params);
-  res.send("Got a POST request");
+  // res.send("Got a POST request");
+  res.json({
+    "body":req.body,
+    "params":req.params,
+  });
+
 });
 
 app.put("/", function (req, res) {
